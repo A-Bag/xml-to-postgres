@@ -3,6 +3,8 @@ package abag.xmltopostgres;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -13,7 +15,7 @@ import java.io.IOException;
 @Service
 public class PostService {
 
-    @Value("#{spring.jpa.properties.hibernate.jdbc.batch_size}")
+    @Value("${spring.jpa.properties.hibernate.jdbc.batch_size}")
     private int batchSize;
 
     private PostRepository postRepository;
@@ -24,12 +26,13 @@ public class PostService {
         this.entityManager = entityManager;
     }
 
+    @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void saveXmlData() throws IOException {
 
         int rowNumber = 0;
 
-        try(LineIterator lineIterator = FileUtils.lineIterator(new File("/media/sf_Downloads/crafts.stackexchange.com/Posts.xml"))) {
+        try (LineIterator lineIterator = FileUtils.lineIterator(new File("/media/sf_Downloads/crafts.stackexchange.com/Posts.xml"))) {
 
             while (lineIterator.hasNext()) {
                 String line = lineIterator.nextLine();
@@ -52,14 +55,29 @@ public class PostService {
         Post post = new Post();
 
         post.setId(Integer.parseInt(extractStringField("Id", line)));
-        post.setPostType(Integer.parseInt(extractStringField("PostTypeId", line)));
-        post.setScore(Integer.parseInt(extractStringField("Score", line)));
-        post.setViewCount(Integer.parseInt(extractStringField("ViewCount", line)));
-        String date = extractStringField("CreationDate", line);
-        int year = Integer.parseInt(date.substring(0, 4));
-        post.setYear(year);
-        post.setBody(extractStringField("Body", line));
-        post.setTitle(extractStringField("Title", line));
+
+        if (line.contains("PostTypeId")) {
+            post.setPostType(Integer.parseInt(extractStringField("PostTypeId", line)));
+        }
+
+        if (line.contains("Score")) {
+            post.setScore(Integer.parseInt(extractStringField("Score", line)));
+        }
+
+        if (line.contains("ViewCount")) {
+            post.setViewCount(Integer.parseInt(extractStringField("ViewCount", line)));
+        }
+
+        if (line.contains("CreationDate")) {
+            String date = extractStringField("CreationDate", line);
+            int year = Integer.parseInt(date.substring(0, 4));
+            post.setYear(year);
+            post.setBody(extractStringField("Body", line));
+        }
+
+        if (line.contains("Title")) {
+            post.setTitle(extractStringField("Title", line));
+        }
 
         return post;
     }

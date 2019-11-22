@@ -1,13 +1,18 @@
 package abag.xmltopostgres;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class Post {
 
-    private int id;
+    @Id private int id;
     private int postType;
     private int score;
     private int viewCount;
-    private String body;
-    private String title;
+    @Column(length = 10485760) private String body;
+    @Column(length = 10485760) private String title;
     private int year;
 
     public long getId() {
