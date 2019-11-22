@@ -30,14 +30,15 @@ public class PostServiceTest {
 
         // given
         ReflectionTestUtils.setField(postService, "batchSize", 50);
+        ReflectionTestUtils.setField(postService, "fileLocation", "src/test/resources/Posts.xml");
 
         // when
         postService.saveXmlData();
 
         // then
-        verify(postRepository, times(3896)).save(any(Post.class));
-        verify(entityManager, times(77)).clear();
-        verify(entityManager, times(77)).flush();
+        verify(postRepository, times(71)).save(any(Post.class));
+        verify(entityManager, times(1)).clear();
+        verify(entityManager, times(1)).flush();
     }
 
     @Test
@@ -71,7 +72,6 @@ public class PostServiceTest {
         String field = postService.extractStringField(fieldName, line);
 
         // then
-        System.out.println(field);
         assertEquals("What are the advantages of watercolour paper over sketch paper?", field);
     }
 

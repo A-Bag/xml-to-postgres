@@ -11,12 +11,17 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 
 @Service
 public class PostService {
 
     @Value("${spring.jpa.properties.hibernate.jdbc.batch_size}")
     private int batchSize;
+
+    @Value("${xml.file.location}")
+    private String fileLocation;
 
     private PostRepository postRepository;
     private EntityManager entityManager;
@@ -32,7 +37,9 @@ public class PostService {
 
         int rowNumber = 0;
 
-        try (LineIterator lineIterator = FileUtils.lineIterator(new File("/media/sf_Downloads/crafts.stackexchange.com/Posts.xml"))) {
+        try (LineIterator lineIterator = FileUtils.lineIterator(new File(fileLocation))) {
+
+            Instant saveStart = Instant.now();
 
             while (lineIterator.hasNext()) {
                 String line = lineIterator.nextLine();
@@ -47,6 +54,11 @@ public class PostService {
                     }
                 }
             }
+            Instant saveEnd = Instant.now();
+
+            long saveTime = Duration.between(saveStart, saveEnd).toMillis();
+
+            System.out.println("Save time: " + saveTime + "ms");
 
         }
     }
