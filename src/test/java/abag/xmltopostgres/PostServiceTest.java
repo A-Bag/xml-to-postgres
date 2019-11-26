@@ -36,7 +36,7 @@ public class PostServiceTest {
         postService.saveXmlData();
 
         // then
-        verify(postRepository, times(71)).save(any(Post.class));
+        verify(postRepository, times(72)).save(any(Post.class));
         verify(entityManager, times(1)).clear();
         verify(entityManager, times(1)).flush();
     }

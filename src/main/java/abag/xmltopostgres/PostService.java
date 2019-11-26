@@ -99,7 +99,7 @@ public class PostService {
         if (line.contains("Body=\"")) {
             String rawBody = extractStringField("Body=\"", line);
             String bodyText = removeHTMLFromString(rawBody);
-            post.setBody(Jsoup.parse(bodyText).text());
+            post.setBody(bodyText);
         }
 
         if (line.contains("Title=\"")) {
@@ -118,8 +118,10 @@ public class PostService {
         return line.substring(beginIndex, endIndex);
     }
 
-    private String removeHTMLFromString(String string) {
-        String htmlEscapedString = StringEscapeUtils.unescapeHtml4(string);
-        return Jsoup.parse(htmlEscapedString).text();
+    private String removeHTMLFromString(String input) {
+        String replace = input.replace("&amp;", "");
+        String html = StringEscapeUtils.unescapeHtml4(replace);
+        return Jsoup.parse(html).text();
     }
+
 }
