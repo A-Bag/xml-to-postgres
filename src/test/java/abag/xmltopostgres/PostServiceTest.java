@@ -45,7 +45,7 @@ public class PostServiceTest {
     public void testConvertXmlLineToPost() {
 
         // given
-        String line = "<row Id=\"1\" PostTypeId=\"2\" AcceptedAnswerId=\"10\" CreationDate=\"2016-04-26T19:30:14.687\" Score=\"22\" ViewCount=\"678\" Body=\"&lt;p&gt;I've been looking around for some paper for watercolour painting. Watercolour paper can be over double the price of sketch paper.&lt;/p&gt;&#xA;&#xA;&lt;p&gt;What makes watercolour paper better? Should I invest the money, and buy the watercolour paper, or save my money and take a chance on the cheaper option?&lt;/p&gt;&#xA;\" OwnerUserId=\"7\" LastEditorUserId=\"7\" LastEditDate=\"2016-10-27T19:26:38.457\" LastActivityDate=\"2016-10-27T19:26:38.457\" Title=\"What are the advantages of watercolour paper over sketch paper?\" Tags=\"&lt;paper&gt;&lt;watercoloring&gt;&lt;sketching&gt;\" AnswerCount=\"3\" CommentCount=\"2\" />";
+        String line = "<row Id=\"1\" PostTypeId=\"2\" AcceptedAnswerId=\"10\" CreationDate=\"2016-04-26T19:30:14.687\" Score=\"22\" ViewCount=\"678\" Body=\"&lt;p&gt;As mentioned on &lt;a href=&quot;https://en.wikipedia.org/wiki/Sindarin#Phonology&quot; rel=&quot;nofollow noreferrer&quot;&gt;Wikipedia&lt;/a&gt;, it was modelled on Welsh and some other Norse languages:&lt;/p&gt;&#xA;&#xA;&lt;blockquote&gt;&#xA;  &lt;p&gt;Sindarin was designed with a Welsh-like phonology. It has most of the same sounds and a similar sound structure, or phonotactics. The phonologies of Old English, Old Norse and Icelandic are also fairly close to Sindarin and, along with Welsh, certainly did have an influence on some of the language's grammatical features, especially the plurals (see below).&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;\" OwnerUserId=\"7\" LastEditorUserId=\"7\" LastEditDate=\"2016-10-27T19:26:38.457\" LastActivityDate=\"2016-10-27T19:26:38.457\" Title=\"What are the advantages of watercolour paper over sketch paper?\" Tags=\"&lt;paper&gt;&lt;watercoloring&gt;&lt;sketching&gt;\" AnswerCount=\"3\" CommentCount=\"2\" />";
 
         // when
         Post post = postService.convertXmlLineToPost(line);
@@ -57,7 +57,7 @@ public class PostServiceTest {
         assertEquals(678, post.getViewCount());
         assertEquals(2016, post.getYear());
         assertEquals("What are the advantages of watercolour paper over sketch paper?", post.getTitle());
-        assertEquals("&lt;p&gt;I've been looking around for some paper for watercolour painting. Watercolour paper can be over double the price of sketch paper.&lt;/p&gt;&#xA;&#xA;&lt;p&gt;What makes watercolour paper better? Should I invest the money, and buy the watercolour paper, or save my money and take a chance on the cheaper option?&lt;/p&gt;&#xA;", post.getBody());
+        assertEquals("As mentioned on Wikipedia, it was modelled on Welsh and some other Norse languages: Sindarin was designed with a Welsh-like phonology. It has most of the same sounds and a similar sound structure, or phonotactics. The phonologies of Old English, Old Norse and Icelandic are also fairly close to Sindarin and, along with Welsh, certainly did have an influence on some of the language's grammatical features, especially the plurals (see below).", post.getBody());
 
     }
 
